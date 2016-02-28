@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -76,6 +77,7 @@ public class MainActivity extends Activity {
                     try {
                         String query = "username="+username+"&password="+password;
 
+                        Log.v("Query",query);
                         URL url = new URL(url_string);
                         HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                         //Set to POST
@@ -104,7 +106,15 @@ public class MainActivity extends Activity {
                             List<String> headerValues = entry.getValue();
                             Iterator<String> it = headerValues.iterator();
                             if (it.hasNext()) {
-                                builder.append(it.next());
+                                String itnext = it.next();
+
+                                if (entry.getKey() == "Key"){
+                                    SharedPreferences.Editor e = sharedPrefLogin.edit();
+                                    e.putBoolean("loggedIn",true);
+                                    e.putString("Key", itnext);
+                                }
+
+                                builder.append(itnext);
 
                                 while (it.hasNext()) {
                                     builder.append(", ")
@@ -115,6 +125,16 @@ public class MainActivity extends Activity {
                             builder.append("\n");
                         }
                         System.out.print(builder);
+                        Log.v("Builder", builder.toString());
+                        if(sharedPrefLogin.contains("Key")){
+                            Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                            homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(homeIntent);
+                            finish();
+                        } else {
+                            Context context = getApplicationContext();
+                            Toast toast = Toast.makeText(context, "There was an error with your login", Toast.LENGTH_SHORT);
+                        }
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                     }
