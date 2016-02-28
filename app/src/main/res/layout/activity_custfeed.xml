@@ -10,7 +10,8 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/view2">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -21,13 +22,23 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        android:text="Upload A Post"
+        android:id="@+id/button_upload"
+        android:layout_below="@+id/view2"
+        android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_below="@+id/button_upload"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="40dp"
+        android:clickable="true"
+        android:smoothScrollbar="true"
+        android:scrollingCache="true" />
 
 </RelativeLayout>
