@@ -125,6 +125,7 @@ public class MainActivity extends Activity {
                             builder.append("\n");
                         }
                         System.out.print(builder);
+
                         Log.v("Builder", builder.toString());
                         if(sharedPrefLogin.contains("Key")){
                             Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
