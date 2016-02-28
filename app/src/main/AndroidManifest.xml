@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".custfeed"
+            android:name=".HomeActivity"
             android:label="@string/title_activity_custfeed"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
