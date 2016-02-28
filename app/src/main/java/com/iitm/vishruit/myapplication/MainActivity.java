@@ -1,5 +1,6 @@
 package com.iitm.vishruit.myapplication;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,32 +16,27 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONException;
 
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 import com.iitm.vishruit.myapplication.*;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         final SharedPreferences sharedPrefLogin = getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         Button loginButton = (Button) findViewById(R.id.button_login);
 
@@ -65,10 +61,30 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             Log.d("Log : ", "Does not Contain LoginStatus");
+
             loginButton.setOnClickListener(new Button.OnClickListener(){
                 @Override
                 public void onClick(View view){
                     //Do something when someone clicks on submit button...send a http request and handle it.
+                    String url_string = "http://echoapp.cloudapp.net/rest-auth/login/";
+                    EditText username = (EditText) findViewById(R.id.et_name);
+                    EditText password = (EditText) findViewById(R.id.et_password);
+                    try {
+                        String query = "username="+username+"&password="+password;
+
+                        URL url = new URL(url_string);
+                        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+                        //Set to POST
+                        connection.setDoOutput(true);
+                        connection.setRequestMethod("POST");
+                        connection.setReadTimeout(10000);
+                        Writer writer = new OutputStreamWriter(connection.getOutputStream());
+                        writer.write(query);
+                        writer.flush();
+                        writer.close();
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                    }
                 }
             });
 
