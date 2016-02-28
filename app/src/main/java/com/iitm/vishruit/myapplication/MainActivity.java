@@ -115,6 +115,12 @@ public class MainActivity extends Activity {
                             builder.append("\n");
                         }
                         System.out.print(builder);
+
+                        Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(homeIntent);
+                        finish();
+
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                     }
