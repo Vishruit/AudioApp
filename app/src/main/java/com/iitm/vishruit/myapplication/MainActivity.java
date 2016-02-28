@@ -26,6 +26,10 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import com.iitm.vishruit.myapplication.*;
 
 public class MainActivity extends Activity {
@@ -73,15 +77,44 @@ public class MainActivity extends Activity {
                         String query = "username="+username+"&password="+password;
 
                         URL url = new URL(url_string);
-                        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+                        HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                         //Set to POST
-                        connection.setDoOutput(true);
-                        connection.setRequestMethod("POST");
-                        connection.setReadTimeout(10000);
-                        Writer writer = new OutputStreamWriter(connection.getOutputStream());
+                        httpURLConnection.setDoOutput(true);
+                        httpURLConnection.setRequestMethod("POST");
+                        httpURLConnection.setReadTimeout(10000);
+                        Writer writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
                         writer.write(query);
                         writer.flush();
                         writer.close();
+
+                        StringBuilder builder = new StringBuilder();
+                        builder.append(httpURLConnection.getResponseCode())
+                                .append(" ")
+                                .append(httpURLConnection.getResponseMessage())
+                                .append("\n");
+
+                        Map<String, List<String>> map = httpURLConnection.getHeaderFields();
+                        for (Map.Entry<String, List<String>> entry : map.entrySet())
+                        {
+                            if (entry.getKey() == null)
+                                continue;
+                            builder.append( entry.getKey())
+                                    .append(": ");
+
+                            List<String> headerValues = entry.getValue();
+                            Iterator<String> it = headerValues.iterator();
+                            if (it.hasNext()) {
+                                builder.append(it.next());
+
+                                while (it.hasNext()) {
+                                    builder.append(", ")
+                                            .append(it.next());
+                                }
+                            }
+
+                            builder.append("\n");
+                        }
+                        System.out.print(builder);
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                     }
