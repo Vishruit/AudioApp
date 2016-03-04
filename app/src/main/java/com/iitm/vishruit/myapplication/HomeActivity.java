@@ -2,17 +2,19 @@ package com.iitm.vishruit.myapplication;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
 public class HomeActivity extends Activity {
 
     AlertDialog alertDialogStores;
+    String urlPic = null, urlAudio = null;
+    initialize ini;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +27,36 @@ public class HomeActivity extends Activity {
             public void onClick(View v) {
                 switch (v.getId()) {
 
-                    case R.id.button_upload:
-                        showPopUp();
+                    case R.id.button_uploadpic:
+//                        showPopUp();
+                        Intent myIntentPic = new Intent(HomeActivity.this, CameraActivity.class);
+                        //myIntentPic.putExtra("URL_PIC", "url");
+                        HomeActivity.this.startActivity(myIntentPic);
+                        //while(urlPic.isEmpty())
+//                        urlPic = getIntent().getStringExtra("URL_PIC");
+
+                        break;
+
+                    case R.id.button_audio:
+                        Intent myIntentAudio = new Intent(HomeActivity.this, AudioCapture.class);
+                        //myIntentAudio.putExtra("URL_AUDIO", "url");
+                        HomeActivity.this.startActivity(myIntentAudio);
+
+//                        while(urlAudio.isEmpty())
+//                        urlAudio = getIntent().getStringExtra("URL_AUDIO");
+//                        Log.d("URL_AUDIO", urlAudio);
                         break;
                 }
+
             }
         };
 
-        findViewById(R.id.button_upload).setOnClickListener(handler);
+        //urlPic = getIntent().getStringExtra("URL_PIC");
+        //urlAudio = getIntent().getStringExtra("URL_AUDIO");
+
+        findViewById(R.id.button_uploadpic).setOnClickListener(handler);
+        findViewById(R.id.button_audio).setOnClickListener(handler);
+
     }
 
     public void showPopUp(){
@@ -41,26 +65,9 @@ public class HomeActivity extends Activity {
         // your items can be from a database
         ObjectItem[] ObjectItemData = new ObjectItem[20];
 
-        ObjectItemData[0] = new ObjectItem(91, "Mercury");
-        ObjectItemData[1] = new ObjectItem(92, "Watson");
-        ObjectItemData[2] = new ObjectItem(93, "Nissan");
-        ObjectItemData[3] = new ObjectItem(94, "Puregold");
-        ObjectItemData[4] = new ObjectItem(95, "SM");
-        ObjectItemData[5] = new ObjectItem(96, "7 Eleven");
-        ObjectItemData[6] = new ObjectItem(97, "Ministop");
-        ObjectItemData[7] = new ObjectItem(98, "Fat Chicken");
-        ObjectItemData[8] = new ObjectItem(99, "Master Siomai");
-        ObjectItemData[9] = new ObjectItem(100, "Mang Inasal");
-        ObjectItemData[10] = new ObjectItem(101, "Mercury 2");
-        ObjectItemData[11] = new ObjectItem(102, "Watson 2");
-        ObjectItemData[12] = new ObjectItem(103, "Nissan 2");
-        ObjectItemData[13] = new ObjectItem(104, "Puregold 2");
-        ObjectItemData[14] = new ObjectItem(105, "SM 2");
-        ObjectItemData[15] = new ObjectItem(106, "7 Eleven 2");
-        ObjectItemData[16] = new ObjectItem(107, "Ministop 2");
-        ObjectItemData[17] = new ObjectItem(108, "Fat Chicken 2");
-        ObjectItemData[18] = new ObjectItem(109, "Master Siomai 2");
-        ObjectItemData[19] = new ObjectItem(110, "Mang Inasal 2");
+
+        ObjectItemData[0] = new ObjectItem(91, "Take a Photo");
+        ObjectItemData[1] = new ObjectItem(92, "Upload A Photo");
 
         // our adapter instance
         ArrayAdapterItem adapter = new ArrayAdapterItem(this, R.layout.list_view_row_item, ObjectItemData);
@@ -75,9 +82,5 @@ public class HomeActivity extends Activity {
                 .setView(listViewItems)
                 .setTitle("Stores")
                 .show();
-
     }
-
-
-
 }

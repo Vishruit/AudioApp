@@ -4,4 +4,6 @@
     <string name="title_activity_custfeed">custfeed</string>
     <string name="title_activity_feed_comment">feed_comment</string>
     <string name="sharedPref">Shared Preferences</string>
+    <string name="title_activity_audio_capture">AudioCapture</string>
+    <string name="hello_world">Hello world!</string>
 </resources>

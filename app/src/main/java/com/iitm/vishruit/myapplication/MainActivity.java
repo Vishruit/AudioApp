@@ -49,6 +49,7 @@ public class MainActivity extends Activity {
             Log.d("Log : ", "LoginStatus True");
             // Share URI Data
             Uri data = getIntent().getData();
+
             if(data != null){
                 // Redirect to Home Page
                 Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
@@ -71,71 +72,71 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View view){
                     //Do something when someone clicks on submit button...send a http request and handle it.
-                    String url_string = "http://echoapp.cloudapp.net/rest-auth/login/";
-                    EditText username = (EditText) findViewById(R.id.et_name);
-                    EditText password = (EditText) findViewById(R.id.et_password);
+//                    String url_string = "http://echoapp.cloudapp.net/rest-auth/login/";
+//                    EditText username = (EditText) findViewById(R.id.et_name);
+//                    EditText password = (EditText) findViewById(R.id.et_password);
                     try {
-                        String query = "username="+username+"&password="+password;
-
-                        Log.v("Query",query);
-                        URL url = new URL(url_string);
-                        HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                        //Set to POST
-                        httpURLConnection.setDoOutput(true);
-                        httpURLConnection.setRequestMethod("POST");
-                        httpURLConnection.setReadTimeout(10000);
-                        Writer writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
-                        writer.write(query);
-                        writer.flush();
-                        writer.close();
-
-                        StringBuilder builder = new StringBuilder();
-                        builder.append(httpURLConnection.getResponseCode())
-                                .append(" ")
-                                .append(httpURLConnection.getResponseMessage())
-                                .append("\n");
-
-                        Map<String, List<String>> map = httpURLConnection.getHeaderFields();
-                        for (Map.Entry<String, List<String>> entry : map.entrySet())
-                        {
-                            if (entry.getKey() == null)
-                                continue;
-                            builder.append( entry.getKey())
-                                    .append(": ");
-
-                            List<String> headerValues = entry.getValue();
-                            Iterator<String> it = headerValues.iterator();
-                            if (it.hasNext()) {
-                                String itnext = it.next();
-
-                                if (entry.getKey() == "Key"){
-                                    SharedPreferences.Editor e = sharedPrefLogin.edit();
-                                    e.putBoolean("loggedIn",true);
-                                    e.putString("Key", itnext);
-                                }
-
-                                builder.append(itnext);
-
-                                while (it.hasNext()) {
-                                    builder.append(", ")
-                                            .append(it.next());
-                                }
-                            }
-
-                            builder.append("\n");
-                        }
-                        System.out.print(builder);
-
-                        Log.v("Builder", builder.toString());
-                        if(sharedPrefLogin.contains("Key")){
+//                        String query = "username="+username+"&password="+password;
+//
+//                        Log.v("Query",query);
+//                        URL url = new URL(url_string);
+//                        HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+//                        //Set to POST
+//                        httpURLConnection.setDoOutput(true);
+//                        httpURLConnection.setRequestMethod("POST");
+//                        httpURLConnection.setReadTimeout(10000);
+//                        Writer writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
+//                        writer.write(query);
+//                        writer.flush();
+//                        writer.close();
+//
+//                        StringBuilder builder = new StringBuilder();
+//                        builder.append(httpURLConnection.getResponseCode())
+//                                .append(" ")
+//                                .append(httpURLConnection.getResponseMessage())
+//                                .append("\n");
+//
+//                        Map<String, List<String>> map = httpURLConnection.getHeaderFields();
+//                        for (Map.Entry<String, List<String>> entry : map.entrySet())
+//                        {
+//                            if (entry.getKey() == null)
+//                                continue;
+//                            builder.append( entry.getKey())
+//                                    .append(": ");
+//
+//                            List<String> headerValues = entry.getValue();
+//                            Iterator<String> it = headerValues.iterator();
+//                            if (it.hasNext()) {
+//                                String itnext = it.next();
+//
+//                                if (entry.getKey() == "Key"){
+//                                    SharedPreferences.Editor e = sharedPrefLogin.edit();
+//                                    e.putBoolean("loggedIn",true);
+//                                    e.putString("Key", itnext);
+//                                }
+//
+//                                builder.append(itnext);
+//
+//                                while (it.hasNext()) {
+//                                    builder.append(", ")
+//                                            .append(it.next());
+//                                }
+//                            }
+//
+//                            builder.append("\n");
+//                        }
+//                        System.out.print(builder);
+//
+//                        Log.v("Builder", builder.toString());
+//                        if(sharedPrefLogin.contains("Key")){
                             Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
                             homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(homeIntent);
                             finish();
-                        } else {
-                            Context context = getApplicationContext();
-                            Toast toast = Toast.makeText(context, "There was an error with your login", Toast.LENGTH_SHORT);
-                        }
+//                        } else {
+//                            Context context = getApplicationContext();
+//                            Toast toast = Toast.makeText(context, "There was an error with your login", Toast.LENGTH_SHORT);
+//                        }
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                     }
@@ -166,8 +167,5 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
 
 }
