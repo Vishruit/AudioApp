@@ -26,7 +26,9 @@ public class CameraActivity  extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call_camera);
         ImageView photoImage = (ImageView) findViewById(R.id.imageView);
-        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
+
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -34,7 +36,7 @@ public class CameraActivity  extends Activity{
         File image = null;
         try {
             image = File.createTempFile(
-                    timeStamp,  /* prefix */
+                    "tt331",  /* prefix */
                     ".jpg",         /* suffix */
                         storageDir      /* directory */
             );
@@ -44,7 +46,7 @@ public class CameraActivity  extends Activity{
 
         fileUri = Uri.fromFile(image);
         i.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-        startActivityForResult(i, REQUEST_IMAGE_CAPTURE);
+        startActivityForResult(i, 1);
 
 //        callCameraButton.setOnClickListener(new View.OnClickListener() {
 //            public void onClick(View view) {
@@ -54,14 +56,13 @@ public class CameraActivity  extends Activity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (resultCode == RESULT_OK) {
 
             // successfully captured the image
             // launching upload activity
-//            Intent extras = new Intent(CameraActivity.this, HomeActivity.class);
-
             Intent myIntentAudio = new Intent(CameraActivity.this, AudioCapture.class);
-            myIntentAudio.putExtra("URL_PIC", fileUri.toString());
+            myIntentAudio.putExtra("URL_PIC", fileUri.getPath());
             CameraActivity.this.startActivity(myIntentAudio);
 
 //                        while(urlAudio.isEmpty())

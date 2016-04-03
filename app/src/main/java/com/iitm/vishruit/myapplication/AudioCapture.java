@@ -136,12 +136,11 @@ public class AudioCapture extends Activity {
 //                    Uri audio = Uri.fromFile(new File(a_u));
                     Log.d("LOG", i_u);
                     Log.d("LOG2", a_u);
-                    Uri image = Uri.fromFile(new File(i_u));
 
                     try {
+                        Log.d("LOG", i_u);
                         is = new FileInputStream(new File(i_u));
                         int p = is.available();
-
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                         return null;
@@ -154,7 +153,7 @@ public class AudioCapture extends Activity {
 //                    } catch (FileNotFoundException e) {
 //                        e.printStackTrace();
 //                    }
-                    new HttpFileUpload("http://echoapp.cloudapp.net/").Send_Now(is);//, ass);
+                    new HttpFileUpload("http://kunalgrover05.pythonanywhere.com/echo/files/").Send_Now(is);//, ass);
                     return null;
                 }
             }.execute();
