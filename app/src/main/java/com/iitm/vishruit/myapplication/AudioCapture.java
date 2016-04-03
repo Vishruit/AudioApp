@@ -131,9 +131,8 @@ public class AudioCapture extends Activity {
                 protected Void doInBackground(Void... voids) {
                     //Do things...
                     FileInputStream is = null;
-//                    FileInputStream as = null;
+                    FileInputStream as = null;
 
-//                    Uri audio = Uri.fromFile(new File(a_u));
                     Log.d("LOG", i_u);
                     Log.d("LOG2", a_u);
 
@@ -148,12 +147,13 @@ public class AudioCapture extends Activity {
                         e.printStackTrace();
                         return null;
                     }
-//                    try {
-//                        as = new FileInputStream(new File(a_u));
-//                    } catch (FileNotFoundException e) {
-//                        e.printStackTrace();
-//                    }
-                    new HttpFileUpload("http://kunalgrover05.pythonanywhere.com/echo/files/").Send_Now(is);//, ass);
+
+                    try {
+                        as = new FileInputStream(new File(a_u));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    new HttpFileUpload("http://kunalgrover05.pythonanywhere.com/echo/files/").Send_Now(is, as);//, ass);
                     return null;
                 }
             }.execute();

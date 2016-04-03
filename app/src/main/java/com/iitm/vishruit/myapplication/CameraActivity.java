@@ -26,8 +26,8 @@ public class CameraActivity  extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call_camera);
         ImageView photoImage = (ImageView) findViewById(R.id.imageView);
-//        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
+        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
 
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);

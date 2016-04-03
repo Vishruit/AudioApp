@@ -29,9 +29,9 @@ public class HttpFileUpload implements Runnable{
         }
     }
 
-    void Send_Now(FileInputStream fStream) {//, FileInputStream as1){
+    void Send_Now(FileInputStream fStream, FileInputStream as1) {//, FileInputStream as1){
         fileInputStream = fStream;
-//        as = as1;
+        as = as1;
         Sending();
     }
 
@@ -68,7 +68,7 @@ public class HttpFileUpload implements Runnable{
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
 
-            dos.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\"" + "file" +"\"" + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\"" + "file.jpg" +"\"" + lineEnd);
             dos.writeBytes(lineEnd);
 
             Log.e(Tag,"Headers are written");
@@ -91,35 +91,33 @@ public class HttpFileUpload implements Runnable{
                 bytesRead = fileInputStream.read(buffer, 0,bufferSize);
             }
             dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            fileInputStream.close();
+
+            dos.writeBytes("Content-Disposition: form-data; name=\"audio_caption\";filename=\"" + "file.3gp" + "\"" + lineEnd);
+            dos.writeBytes(lineEnd);
+
+            // create a buffer of maximum size
+            bytesAvailable = as.available();
+//
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            buffer = new byte[bufferSize];
+//
+//            // read file and write it into form...
+            bytesRead = as.read(buffer, 0, bufferSize);
+//
+            while (bytesRead > 0)
+            {
+                dos.write(buffer, 0, bufferSize);
+                bytesAvailable = as.available();
+                bufferSize = Math.min(bytesAvailable,maxBufferSize);
+                bytesRead = as.read(buffer, 0,bufferSize);
+            }
+            dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
             // close streams
-            fileInputStream.close();
-
-//            dos.writeBytes("Content-Disposition: form-data; name=\"audio_caption\";filename=\"" + "file" +"\"" + lineEnd);
-//            dos.writeBytes(lineEnd);
-
-            // create a buffer of maximum size
-//            bytesAvailable = as.available();
-//
-//            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-//            buffer = new byte[bufferSize];
-//
-//            // read file and write it into form...
-//            bytesRead = as.read(buffer, 0, bufferSize);
-//
-//            while (bytesRead > 0)
-//            {
-//                dos.write(buffer, 0, bufferSize);
-//                bytesAvailable = as.available();
-//                bufferSize = Math.min(bytesAvailable,maxBufferSize);
-//                bytesRead = as.read(buffer, 0,bufferSize);
-//            }
-//            dos.writeBytes(lineEnd);
-//            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-////
-////            // close streams
-//            as.close();
+            as.close();
 
             dos.flush();
 
