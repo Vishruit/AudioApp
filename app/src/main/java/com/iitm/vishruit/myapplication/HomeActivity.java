@@ -1,13 +1,20 @@
 package com.iitm.vishruit.myapplication;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+
+import java.io.File;
 
 public class HomeActivity extends Activity {
 
@@ -15,13 +22,11 @@ public class HomeActivity extends Activity {
     String urlPic = null, urlAudio = null;
     initialize ini;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custfeed);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
 
         View.OnClickListener handler = new View.OnClickListener() {
             public void onClick(View v) {

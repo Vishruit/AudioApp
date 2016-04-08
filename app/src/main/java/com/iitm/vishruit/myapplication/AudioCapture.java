@@ -1,7 +1,9 @@
 package com.iitm.vishruit.myapplication;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -10,6 +12,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,103 +29,137 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class AudioCapture extends Activity {
+    private static final int REQUEST_MIC = 1;
+    private static String[] PERMISSIONS_MIC = {
+            Manifest.permission.RECORD_AUDIO
+    };
 
-        Button play,stop,record, finish;
-        private MediaRecorder myAudioRecorder;
-        public String outputFile = null;
-        Intent extras;
-        public String imageFile = null;
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.content_audio_capture);
+    Button play,stop,record, finish;
+    private MediaRecorder myAudioRecorder;
+    public String outputFile = null;
+    Intent extras;
+    public String imageFile = null;
 
-            play=(Button)findViewById(R.id.button3);
-            stop=(Button)findViewById(R.id.button2);
-            record=(Button)findViewById(R.id.button);
-            finish  = (Button)findViewById(R.id.button_finish);
-            imageFile = getIntent().getStringExtra("URL_PIC");
-            Log.d("Test", imageFile);
-            stop.setEnabled(false);
-            play.setEnabled(false);
-            outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.content_audio_capture);
 
-            myAudioRecorder=new MediaRecorder();
-            myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-            myAudioRecorder.setOutputFile(outputFile);
+        play = (Button) findViewById(R.id.button3);
+        stop = (Button) findViewById(R.id.button2);
+        record = (Button) findViewById(R.id.button);
+        finish = (Button) findViewById(R.id.button_finish);
+        imageFile = getIntent().getStringExtra("URL_PIC");
+        Log.d("Test", imageFile);
+        stop.setEnabled(false);
+        play.setEnabled(false);
+        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+        ;
 
-            record.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        myAudioRecorder.prepare();
-                        myAudioRecorder.start();
-                    }
+        // Check if we have record permission
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
 
-                    catch (IllegalStateException | IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_MIC,
+                    REQUEST_MIC
+            );
+        } else {
+            recordAudio();
+        }
+    }
 
-                    record.setEnabled(false);
-                    stop.setEnabled(true);
-
-                    Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
+    @Override
+    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_MIC: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    recordAudio();
                 }
-            });
+                break;
+            }
+        }
+    }
 
-            stop.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    myAudioRecorder.stop();
-                    myAudioRecorder.release();
-                    myAudioRecorder  = null;
+    private void recordAudio() {
+        myAudioRecorder=new MediaRecorder();
+        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        myAudioRecorder.setOutputFile(outputFile);
 
-                    stop.setEnabled(false);
-                    play.setEnabled(true);
-
-                    Toast.makeText(getApplicationContext(), "Audio recorded successfully",Toast.LENGTH_LONG).show();
+        record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    myAudioRecorder.prepare();
+                    myAudioRecorder.start();
                 }
-            });
 
-            play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) throws IllegalArgumentException,SecurityException,IllegalStateException {
-                    MediaPlayer m = new MediaPlayer();
-
-                    try {
-                        m.setDataSource(outputFile);
-                    }
-
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        m.prepare();
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    m.start();
-                    Toast.makeText(getApplicationContext(), "Playing audio", Toast.LENGTH_LONG).show();
+                catch (IllegalStateException | IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
-            });
 
-            finish.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) throws IllegalArgumentException, SecurityException, IllegalStateException {
+                record.setEnabled(false);
+                stop.setEnabled(true);
+
+                Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myAudioRecorder.stop();
+                myAudioRecorder.release();
+                myAudioRecorder  = null;
+
+                stop.setEnabled(false);
+                play.setEnabled(true);
+
+                Toast.makeText(getApplicationContext(), "Audio recorded successfully",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) throws IllegalArgumentException,SecurityException,IllegalStateException {
+                MediaPlayer m = new MediaPlayer();
+
+                try {
+                    m.setDataSource(outputFile);
+                }
+
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    m.prepare();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+                m.start();
+                Toast.makeText(getApplicationContext(), "Playing audio", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) throws IllegalArgumentException, SecurityException, IllegalStateException {
 //                    extras = new Intent(AudioCapture.this, HomeActivity.class);
 //                    extras.putExtra("URL_AUDIO", outputFile);
 //                    startActivity(extras);s
-                    Log.d("LOG", imageFile);
-                    Log.d("LOG2", outputFile);
+                Log.d("LOG", imageFile);
+                Log.d("LOG2", outputFile);
 
-                    launchUploadActivity(imageFile, outputFile);
-                }
-            });
-        }
+                launchUploadActivity(imageFile, outputFile);
+            }
+        });
+    }
 
         private void launchUploadActivity(String i, String a) {
             final String i_u = i;
