@@ -2,6 +2,7 @@ package com.iitm.vishruit.myapplication;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,16 +22,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.iitm.vishruit.myapplication.*;
 
 public class MainActivity extends Activity {
@@ -72,74 +81,70 @@ public class MainActivity extends Activity {
                 @Override
                 public void onClick(View view){
                     //Do something when someone clicks on submit button...send a http request and handle it.
-//                    String url_string = "http://echoapp.cloudapp.net/rest-auth/login/";
-//                    EditText username = (EditText) findViewById(R.id.et_name);
-//                    EditText password = (EditText) findViewById(R.id.et_password);
-                    try {
-//                        String query = "username="+username+"&password="+password;
-//
-//                        Log.v("Query",query);
-//                        URL url = new URL(url_string);
-//                        HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-//                        //Set to POST
-//                        httpURLConnection.setDoOutput(true);
-//                        httpURLConnection.setRequestMethod("POST");
-//                        httpURLConnection.setReadTimeout(10000);
-//                        Writer writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
-//                        writer.write(query);
-//                        writer.flush();
-//                        writer.close();
-//
-//                        StringBuilder builder = new StringBuilder();
-//                        builder.append(httpURLConnection.getResponseCode())
-//                                .append(" ")
-//                                .append(httpURLConnection.getResponseMessage())
-//                                .append("\n");
-//
-//                        Map<String, List<String>> map = httpURLConnection.getHeaderFields();
-//                        for (Map.Entry<String, List<String>> entry : map.entrySet())
-//                        {
-//                            if (entry.getKey() == null)
-//                                continue;
-//                            builder.append( entry.getKey())
-//                                    .append(": ");
-//
-//                            List<String> headerValues = entry.getValue();
-//                            Iterator<String> it = headerValues.iterator();
-//                            if (it.hasNext()) {
-//                                String itnext = it.next();
-//
-//                                if (entry.getKey() == "Key"){
-//                                    SharedPreferences.Editor e = sharedPrefLogin.edit();
-//                                    e.putBoolean("loggedIn",true);
-//                                    e.putString("Key", itnext);
-//                                }
-//
-//                                builder.append(itnext);
-//
-//                                while (it.hasNext()) {
-//                                    builder.append(", ")
-//                                            .append(it.next());
-//                                }
-//                            }
-//
-//                            builder.append("\n");
-//                        }
-//                        System.out.print(builder);
-//
-//                        Log.v("Builder", builder.toString());
-//                        if(sharedPrefLogin.contains("Key")){
-                            Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
-                            homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(homeIntent);
-                            finish();
-//                        } else {
-//                            Context context = getApplicationContext();
-//                            Toast toast = Toast.makeText(context, "There was an error with your login", Toast.LENGTH_SHORT);
-//                        }
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                    }
+                    EditText et_username = (EditText) findViewById(R.id.et_name);
+                    EditText et_password = (EditText) findViewById(R.id.et_password);
+                    EditText et_email = (EditText) findViewById(R.id.et_email);
+                    final String username = et_username.getText().toString();
+                    final String password = et_password.getText().toString();
+                    final String email = et_email.getText().toString();
+
+                    String url_string = "http://kunalgrover05.pythonanywhere.com/rest-auth/login/";
+
+                    Log.v("Query: ",url_string);
+
+                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                    // Request a string response from the provided URL.
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url_string,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    // Display the first 500 characters of the response string.
+
+                                    try {
+                                        JSONObject loginResponse = new JSONObject(response);
+                                        Log.d("Server Response : ", loginResponse.toString());
+
+                                        // On Successful Response from API.
+                                        if (loginResponse.has("key")){
+                                            SharedPreferences.Editor editor = sharedPrefLogin.edit();
+                                            editor.putString("LoginStatus", "True");
+                                            editor.putString("username", username);
+                                            editor.putString("email", email);
+                                            editor.putString("key", loginResponse.getString("key"));
+                                            editor.apply();
+
+                                            // Redirect to Home Page
+                                            Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                                            homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(homeIntent);
+                                            finish(); // call this to finish the current activity. Preventing Back buttton.
+
+                                        } else {
+                                            Toast toast = new Toast(MainActivity.this);
+                                            toast.setText("Sorry, wrong credentials provided.");
+                                        }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Log.e("Error", "Could not parse malformed JSON String: " + response );
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("Login Error: ", "The request failed with error: "+error.toString());
+                        }
+                    }){
+                        @Override
+                        protected Map<String,String> getParams(){
+                            Map<String,String> params = new HashMap<String, String>();
+                            params.put("username",username);
+                            params.put("password",password);
+                            params.put("email", email);
+                            return params;
+                        }
+                    };
+                    queue.add(stringRequest);
                 }
             });
 
