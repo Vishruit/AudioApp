@@ -1,24 +1,22 @@
-package com.iitm.vishruit.myapplication;
+package com.iitm.vishruit.myapplication.Activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
-import java.io.File;
+import com.iitm.vishruit.myapplication.ArrayAdapterItem;
+import com.iitm.vishruit.myapplication.ObjectItem;
+import com.iitm.vishruit.myapplication.OnItemClickListenerListViewItem;
+import com.iitm.vishruit.myapplication.R;
+import com.iitm.vishruit.myapplication.initialize;
 
 public class HomeActivity extends Activity {
 
-    AlertDialog alertDialogStores;
+    public AlertDialog alertDialogStores;
     String urlPic = null, urlAudio = null;
     initialize ini;
 
@@ -43,7 +41,7 @@ public class HomeActivity extends Activity {
                         break;
 
                     case R.id.button_audio:
-                        Intent myIntentAudio = new Intent(HomeActivity.this, AudioCapture.class);
+                        Intent myIntentAudio = new Intent(HomeActivity.this, AudioCaptureActivity.class);
                         //myIntentAudio.putExtra("URL_AUDIO", "url");
                         HomeActivity.this.startActivity(myIntentAudio);
 

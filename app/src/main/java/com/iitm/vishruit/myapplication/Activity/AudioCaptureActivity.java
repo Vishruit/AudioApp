@@ -1,4 +1,4 @@
-package com.iitm.vishruit.myapplication;
+package com.iitm.vishruit.myapplication.Activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -6,16 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,12 +18,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.iitm.vishruit.myapplication.Helpers.HttpFileUpload;
+import com.iitm.vishruit.myapplication.R;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class AudioCapture extends Activity {
+public class AudioCaptureActivity extends Activity {
     private static final int REQUEST_MIC = 1;
     private static String[] PERMISSIONS_MIC = {
             Manifest.permission.RECORD_AUDIO
@@ -150,9 +148,6 @@ public class AudioCapture extends Activity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) throws IllegalArgumentException, SecurityException, IllegalStateException {
-//                    extras = new Intent(AudioCapture.this, HomeActivity.class);
-//                    extras.putExtra("URL_AUDIO", outputFile);
-//                    startActivity(extras);s
                 Log.d("LOG", imageFile);
                 Log.d("LOG2", outputFile);
 

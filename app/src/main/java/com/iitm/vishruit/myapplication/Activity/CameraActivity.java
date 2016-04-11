@@ -1,22 +1,19 @@
-package com.iitm.vishruit.myapplication;
+package com.iitm.vishruit.myapplication.Activity;
 
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.widget.ImageView;
+
+import com.iitm.vishruit.myapplication.R;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -94,7 +91,7 @@ public class CameraActivity  extends Activity{
 
             // successfully captured the image
             // launching upload activity
-            Intent myIntentAudio = new Intent(CameraActivity.this, AudioCapture.class);
+            Intent myIntentAudio = new Intent(CameraActivity.this, AudioCaptureActivity.class);
             myIntentAudio.putExtra("URL_PIC", fileUri.getPath());
             CameraActivity.this.startActivity(myIntentAudio);
 

@@ -1,4 +1,4 @@
-package com.iitm.vishruit.myapplication;
+package com.iitm.vishruit.myapplication.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public class feed_comment extends Activity {
+import com.iitm.vishruit.myapplication.R;
+
+public class FeedCommentActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

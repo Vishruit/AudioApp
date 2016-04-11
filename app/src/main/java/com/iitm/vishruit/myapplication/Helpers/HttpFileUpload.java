@@ -1,4 +1,4 @@
-package com.iitm.vishruit.myapplication;
+package com.iitm.vishruit.myapplication.Helpers;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -19,7 +19,7 @@ public class HttpFileUpload implements Runnable{
     FileInputStream fileInputStream = null;
     FileInputStream as = null;
 
-    HttpFileUpload(String urlString){
+    public HttpFileUpload(String urlString){
         try{
             connectURL = new URL(urlString);
 //            Title= vTitle;
@@ -29,7 +29,7 @@ public class HttpFileUpload implements Runnable{
         }
     }
 
-    void Send_Now(FileInputStream fStream, FileInputStream as1) {//, FileInputStream as1){
+    public void Send_Now(FileInputStream fStream, FileInputStream as1) {//, FileInputStream as1){
         fileInputStream = fStream;
         as = as1;
         Sending();
